@@ -1,8 +1,12 @@
-export const Navigation: React.FC<React.HTMLProps<HTMLDivElement>> = () => {
+interface Signout {
+  signOut: () => void;
+}
+
+export const Navigation: React.FC<Signout> = ({signOut}) => {
 
   return (
     <nav className="flex justify-end">
-        <p className="p-4 text-black text-xl font-semibold cursor-pointer underline">Sign Out</p>
+        <p onClick={signOut} className="p-4 text-black text-xl font-semibold cursor-pointer underline">Sign Out</p>
     </nav>
   )
 };
