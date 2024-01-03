@@ -1,5 +1,5 @@
 import { Navigation } from "./components/Navigation/Navigation.component";
-import { Logo } from "./components/Logo/Logo.component";
+import { LogoComponent } from "./components/Logo/Logo.component";
 import { ImageLinkForm } from "./components/ImageLinkForm/ImageLinkForm.component";
 import { Rank } from "./components/Rank/Rank.component";
 import { FaceRecogonitionBox } from "./components/FaceRecogonitionBox/FaceRecogonitionBox.component";
@@ -9,11 +9,38 @@ import { RegistrationForm } from "./components/Register/Register.component";
 import "./App.css";
 import { useState } from "react";
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  entries: number;
+  joined: Date;
+}
+
 const App = () => {
   const [inputImage, setInputImage] = useState<string>("");
   const [imageBoxDataPoints, setImageBoxDataPoints] = useState<object>({});
   const [showSignIn, setShowSignIn] = useState<string>("signin");
-  console.log(inputImage);
+  const [totalRank, setTotalRank] = useState<number>(0);
+
+  const [idForLoggedInUser, setIdForLoggedInUser] = useState<number>(0);
+
+  const [userProfile, setuserProfile] = useState<User | null>(null);
+
+  const [areaVisible, setAreaVisible] = useState<boolean>(false);
+  const [showSignInArea, setShowSignInArea] = useState<boolean>(false);
+
+  const loadUser = (user: User) => {
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      entries: user.entries,
+      joined: user.joined,
+    };
+
+    setuserProfile(userData);
+  };
 
   const setUpClarify = () => {
     const image = document.getElementById("face-reco");
@@ -76,10 +103,6 @@ const App = () => {
             const name = concept.name;
             const value = concept.value.toFixed(4);
 
-            console.log(
-              `${name}: ${value} BBox: ${topRow}, ${leftCol}, ${bottomRow}, ${rightCol}`
-            );
-
             gettingExactBoxDetails(
               imageWidth,
               imageHeight,
@@ -92,6 +115,7 @@ const App = () => {
         });
       })
       .catch((error) => console.log("error", error));
+    fetchingCount();
   };
 
   const gettingExactBoxDetails = (
@@ -115,50 +139,79 @@ const App = () => {
     };
 
     setImageBoxDataPoints(settingDetailsToBox);
-
-    console.log(imageBoxDataPoints);
   };
 
-  const handleSignIn = (username: string, password: string) => {
-    // Your sign-in logic here
-    console.log("Signing in with:", username, password);
-    // Update state or perform other actions
+  const fetchingCount = async () => {
+    
 
-    setShowSignIn("home");
+    try {
+      const response = await fetch("http://localhost:3000/image ", {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: idForLoggedInUser,
+        }),
+      });
+
+      const count = await response.json();
+      setTotalRank(count);
+      setAreaVisible(true);
+    } catch (error) {
+      console.error("Error during fetchingCount:", error);
+    }
   };
 
   const signOut = () => {
     setShowSignIn("signin");
+    setAreaVisible(false);
+    setShowSignInArea(false);
   };
-
+  
   const register = () => {
     setShowSignIn("register");
   };
 
   return (
-    <div className=" bg-gradient-to-r from-[#7c65a9]  to-[#96d4ca] w-full min-h-screen">
-      <Navigation signOut={signOut} />
+    <div className=" bg-gradient-to-r from-[#7c65a9]  to-[#96d4ca] w-full min-h-screen ">
+      {showSignInArea && <Navigation signOut={signOut} />}
 
       {showSignIn === "home" ? (
         <div>
-        <Logo />
+          <LogoComponent />
 
-        <div className=" -mt-[12rem] flex justify-center items-center flex-col">
-          <Rank />
-          <ImageLinkForm
-            setUpClarify={setUpClarify}
-            setInputImage={setInputImage}
+          <div className=" -mt-[12rem] flex justify-center items-center flex-col">
+            {areaVisible && <Rank totalRank={totalRank} />}
+
+            <ImageLinkForm
+              setUpClarify={setUpClarify}
+              setInputImage={setInputImage}
+              inputImage={inputImage}
+              setImageBoxDataPoints={setImageBoxDataPoints}
+            />
+          </div>
+
+          <FaceRecogonitionBox
+            imageBoxDataPoints={imageBoxDataPoints}
             inputImage={inputImage}
           />
         </div>
-
-        <FaceRecogonitionBox
-          imageBoxDataPoints={imageBoxDataPoints}
-          inputImage={inputImage}
+      ) : showSignIn === "signin" ? (
+        <SignInForm
+          setShowSignIn={setShowSignIn}
+          register={register}
+          setIdForLoggedInUser={setIdForLoggedInUser}
+          setInputImage={setInputImage}
+          setShowSignInArea = {setShowSignInArea}
         />
-      </div>
-      ) : ( showSignIn === 'signin' ? <SignInForm onSignIn={handleSignIn} register={register} /> : <RegistrationForm />
-        
+      ) : (
+        <RegistrationForm
+          setShowSignIn={setShowSignIn}
+          loadUser={loadUser}
+          setIdForLoggedInUser={setIdForLoggedInUser}
+          setInputImage={setInputImage}
+          setAreaVisible={setAreaVisible}
+          setShowSignInArea = {setShowSignInArea}
+        />
       )}
     </div>
   );

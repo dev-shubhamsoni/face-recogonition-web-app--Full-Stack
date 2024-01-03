@@ -1,11 +1,15 @@
-export const Rank: React.FC<React.HTMLProps<HTMLDivElement>> = () => {
+interface PropsForRank {
+    totalRank: number;
+}
+
+export const Rank: React.FC<PropsForRank> = ({totalRank}) => {
     return (
-        <div className="">
+        <div className=" flex align-middle justify-center">
             <div>
-                <p>{`Shubham, your current rank is...`}</p>
+                <p>{`Your current rank is...`}</p>
             </div>
             <div>
-                <p>{`#5`}</p>
+                <p>{`${totalRank}`}</p>
             </div>
         </div>
     )

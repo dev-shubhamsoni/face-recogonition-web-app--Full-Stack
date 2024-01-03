@@ -14,7 +14,7 @@ export const FaceRecogonitionBox: React.FC<FaceRecogo> = ({
   inputImage,
   imageBoxDataPoints,
 }) => {
-  console.log('in div', imageBoxDataPoints);
+  
   return (
     <div className="flex justify-center">
       {inputImage && (

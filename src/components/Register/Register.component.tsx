@@ -1,7 +1,20 @@
 import React, { useState } from "react";
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  entries: number;
+  joined: Date; 
+}
+
 interface RegistrationFormProps {
-  onRegister: (formData: FormData) => void;
+  setShowSignIn: (page: string) => void;
+  loadUser: (page: User) => void;
+  setIdForLoggedInUser: (page: number) => void;
+  setInputImage: (page: string) => void;
+  setAreaVisible: (page: boolean) => void;
+  setShowSignInArea: (page: boolean) => void;
 }
 
 interface FormData {
@@ -10,7 +23,7 @@ interface FormData {
   password: string;
 }
 
-export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }) => {
+export const RegistrationForm: React.FC<RegistrationFormProps> = ({setShowSignInArea, setAreaVisible, setInputImage, setShowSignIn, loadUser, setIdForLoggedInUser}) => {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
@@ -24,8 +37,29 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Perform validation or additional logic here before registering
-    onRegister(formData);
+    
+    fetch('http://localhost:3000/register  ', {
+      method: 'post',
+      headers: {'Content-Type' : 'application/json'},
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+        name: formData.username,
+      })
+
+    }).then(response => response.json())
+    .then(user => {
+      if (user) {
+        setIdForLoggedInUser(user.id);
+        loadUser(user);
+        setShowSignIn("home");
+        setInputImage('');
+        setAreaVisible(false);
+        setShowSignInArea(true);
+      }
+    })
+
+    
   };
 
   return (
