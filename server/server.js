@@ -4,19 +4,22 @@ const bcrypt = require('bcrypt');
 const cors = require('cors')
 const knex = require('knex')
 const saltRounds = 10;
+const dotenv = require('dotenv')
+dotenv.config();
 app.use(express.json());
 app.use(cors());
 
 const db = knex({
     client: 'pg',
     connection: {
-        host: '127.0.0.1',
-        port: '5432',
-        user: 'postgres',
-        password: 'root',
-        database: 'face-reco-db'
+        host: process.env.PGfrHOST,
+        port: process.env.PGfrPORT,
+        user: process.env.PGfrUSER,
+        password: process.env.PGfrPASSWORD,
+        database: process.env.PGfrDATABASE
     }
 });
+
 
 
 app.get('/', (req, res) => {
