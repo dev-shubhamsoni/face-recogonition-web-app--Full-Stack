@@ -22,7 +22,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4005/signin", {
+      const response = await fetch("signin", {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
