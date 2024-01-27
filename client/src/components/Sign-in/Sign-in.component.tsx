@@ -32,9 +32,11 @@ export const SignInForm: React.FC<SignInFormProps> = ({
       });
 
       const data = await response.json();
+      //  made sign in true for testing right now...
 
-      if (data.id) {
-        setIdForLoggedInUser(data.id);
+      const status = true;
+      if (status) {
+        setIdForLoggedInUser(1);
         setShowSignIn("home");
         setInputImage("");
         setShowSignInArea(true);
@@ -91,7 +93,10 @@ export const SignInForm: React.FC<SignInFormProps> = ({
           >
             Sign In
           </button>
-          <p onClick={register} className=" cursor-pointer border-2 px-5 items-center py-1 rounded-lg border-[#4e80ee]">
+          <p
+            onClick={register}
+            className=" cursor-pointer border-2 px-5 items-center py-1 rounded-lg border-[#4e80ee]"
+          >
             Register
           </p>
         </div>
