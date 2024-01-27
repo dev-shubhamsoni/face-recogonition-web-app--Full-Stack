@@ -4,7 +4,10 @@ const cors = require('cors')
 const knex = require('knex')
 const dotenv = require('dotenv')
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
+app.use(cors(corsOptions));
 
 dotenv.config();
 

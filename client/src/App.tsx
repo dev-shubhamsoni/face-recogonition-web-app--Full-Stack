@@ -145,7 +145,7 @@ const App = () => {
     
 
     try {
-      const response = await fetch("image ", {
+      const response = await fetch("image", {
         method: "put",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
