@@ -3,9 +3,10 @@ const app = express();
 const cors = require('cors')
 const knex = require('knex')
 const dotenv = require('dotenv')
-dotenv.config();
 app.use(express.json());
 app.use(cors());
+
+dotenv.config();
 
 const db = knex({
     client: 'pg',
