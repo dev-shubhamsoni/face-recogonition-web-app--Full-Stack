@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.send(database.users);
 });
 
-app.post('/signin', (req, res) => {
+app.post('api/v1/signin', (req, res) => {
 
     const { email, password } = req.body;
     if (!email, !password) {
@@ -53,7 +53,7 @@ app.post('/signin', (req, res) => {
         .catch(err => res.status(400).json('wrong credentials'))
 });
 
-app.post('/register', (req, res) => {
+app.post('api/v1/register', (req, res) => {
 
     const { name, email, password } = req.body;
     if (!email || !name || !password) {
@@ -92,7 +92,7 @@ app.post('/register', (req, res) => {
 
 });
 
-app.post('/profile/:id', (req, res) => {
+app.post('api/v1/profile/:id', (req, res) => {
     const { id } = req.params;
 
     const user = database.users.find(item => item.id === id);
@@ -109,7 +109,7 @@ app.post('/profile/:id', (req, res) => {
 
 });
 
-app.put('/image', (req, res) => {
+app.put('api/v1/image', (req, res) => {
 
     const { id } = req.body;
 

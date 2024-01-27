@@ -38,7 +38,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({setShowSignIn
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    fetch('register', {
+    fetch('api/v1/register', {
       method: 'post',
       headers: {'Content-Type' : 'application/json'},
       body: JSON.stringify({
