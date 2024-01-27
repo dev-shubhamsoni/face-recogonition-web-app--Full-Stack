@@ -21,29 +21,34 @@ export const SignInForm: React.FC<SignInFormProps> = ({
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("signin", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: username,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-      //  made sign in true for testing right now...
-
-      const status = true;
-      if (status) {
-        setIdForLoggedInUser(1);
+    setIdForLoggedInUser(1);
         setShowSignIn("home");
         setInputImage("");
         setShowSignInArea(true);
-      }
-    } catch (error) {
-      console.log("Error during sign in:", error);
-    }
+
+    // try {
+    //   const response = await fetch("signin", {
+    //     method: "post",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       email: username,
+    //       password: password,
+    //     }),
+    //   });
+
+    //   const data = await response.json();
+    //   //  made sign in true for testing right now...
+
+    //   const status = true;
+    //   if (status) {
+    //     setIdForLoggedInUser(1);
+    //     setShowSignIn("home");
+    //     setInputImage("");
+    //     setShowSignInArea(true);
+    //   }
+    // } catch (error) {
+    //   console.log("Error during sign in:", error);
+    // }
   };
 
   return (
