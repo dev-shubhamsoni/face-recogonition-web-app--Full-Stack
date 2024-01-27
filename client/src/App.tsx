@@ -145,7 +145,7 @@ const App = () => {
     
 
     try {
-      const response = await fetch("http://localhost:3000/image ", {
+      const response = await fetch("http://localhost:4005/image ", {
         method: "put",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

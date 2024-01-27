@@ -15,14 +15,14 @@ export const SignInForm: React.FC<SignInFormProps> = ({
   setInputImage,
   setShowSignInArea,
 }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("test5@gmail.com");
+  const [password, setPassword] = useState("test5");
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("signin", {
+      const response = await fetch("http://localhost:4005/signin", {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -56,7 +56,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({
             htmlFor="username"
             className="block text-gray-700 font-medium mb-2"
           >
-            Username
+            Email
           </label>
           <input
             type="text"

@@ -1,9 +1,7 @@
 const express = require('express');
 const app = express();
-const bcrypt = require('bcrypt');
 const cors = require('cors')
 const knex = require('knex')
-const saltRounds = 10;
 const dotenv = require('dotenv')
 dotenv.config();
 app.use(express.json());
@@ -36,7 +34,7 @@ app.post('/signin', (req, res) => {
     db.select('email', 'hash').from('login')
         .where('email', '=', req.body.email)
         .then(data => {
-            const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+            const isValid = (password === data[0].hash);
             if (isValid) {
                 return db.select('*').from('users').where('email', '=', req.body.email)
                     .then(user => {
@@ -54,15 +52,16 @@ app.post('/signin', (req, res) => {
 app.post('/register', (req, res) => {
 
     const { name, email, password } = req.body;
-    if (!email, !name, !password) {
+    if (!email || !name || !password) {
         return res.status(400).json('incorrect form submission')
     }
-
-    const hash = bcrypt.hashSync(password, saltRounds);
+    const crypto = require('crypto');
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex').slice(0, 50);
 
     db.transaction(trx => {
         trx.insert({
-            hash: hash,
+            hash: password,
             email: email
         })
             .into('login')
