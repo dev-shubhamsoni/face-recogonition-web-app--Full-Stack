@@ -121,4 +121,6 @@ app.put('/image', (req, res) => {
 
 })
 
-app.listen(4005);
+app.listen(4005, () => {
+    console.log(`Listening on port ${4005}`);
+});
